@@ -30,7 +30,7 @@ def get_text_percentage(file_name: str) -> float:
 
 
 def copy_files_to_folder(files):
-    destination_folder = 'D:\\SpaceGPT_Files\\'
+    destination_folder = 'D:\\SpaceGPT_EXPO_Files\\'
     copied_files = []
     low_text_files = []  # Para llevar un seguimiento de los archivos con menos del 10% de texto
     error_files = []  # Para llevar un seguimiento de los archivos que encontraron errores durante el procesamiento

@@ -2,13 +2,13 @@ import os
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 import json
-from clients import search_RFC_in_text
+from utils import search_RFC_in_text
 from asis import submit_and_wait_for_response
 import asyncio
 class OpenAIHelper:
     """A helper class to interact with OpenAI's API for specific tasks such as extracting information from invoices."""
 
-    def __init__(self, model="gpt-4-1106-preview"):
+    def __init__(self, model="gpt-4-turbo-preview"):
         """Initializes the OpenAIHelper with the specified model and API key."""
         load_dotenv()
         self.api_key = os.getenv("OPENAI_API_KEY")
@@ -29,6 +29,7 @@ class OpenAIHelper:
                   "2. For each item in the invoice, list the part number, description, quantity, unit of measure, cost, and weight."
                     "3. There are times that the information is in the same line.")
         json_format,rfc =  search_RFC_in_text(invoice_text)
+    
         if rfc=="MMJ930128UR6":
             extracted_text = submit_and_wait_for_response(invoice_text)
             return  extracted_text
@@ -39,7 +40,7 @@ class OpenAIHelper:
                     model=self.model,
                     messages=[
                         {"role": "system", "content": "You are an assistant skilled in extracting specific information from structured documents like invoices."},
-                        {"role": "system", "content": f"Return data complete in the following format: JSON with key-value pairs. {json_format}"+ "and respect str and int types remove $ of values."},
+                        {"role": "system", "content": f"Return complete data in the following format: JSON with key-value pairs. {json_format}"+ "and respect str and int types remove $ of values."},
                         {"role": "user", "content": f"{prompt}\n\n{segment}"}
                     ],
                 )
