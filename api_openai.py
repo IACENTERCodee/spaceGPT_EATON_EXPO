@@ -64,20 +64,20 @@ class OpenAIHelper:
 
             return json.dumps(combined_response, indent=4)
 
+
     async def continue_conversation(self, conversation, next_prompt):
         """
         Continues a conversation with OpenAI's model in case of incomplete responses.
 
         :param conversation: The current conversation context.
         :param next_prompt: The next prompt to continue the conversation.
-        :return: The continued part of the conversation.
+        :return: The complete response from the conversation.
         """
         try:
             response = await self.client.chat.completions.create(model=self.model, messages=conversation)
             if response.choices[0].finish_reason == 'length':
                 conversation.append({'role': 'user', 'content': next_prompt})
-                next_response = await self.client.chat.completions.create(model=self.model, messages=conversation)
-                return next_response.choices[0].message.content
+                return await self.continue_conversation(conversation, next_prompt)  # Recursively continue the conversation
             return response.choices[0].message.content
         except Exception as e:
             print(f"An error occurred: {e}")
