@@ -63,15 +63,17 @@ def insert_invoice_data(json_data):
             # Procesa y convierte los datos del JSON
             processed_data = process_and_convert_data(json_data)
 
+            processed_data['processed'] = 0
+
             # Inserta en la tabla de facturas
             invoice_data = processed_data
             cur.execute("""
-                INSERT INTO invoices (invoice_number, invoice_date, buyer, total, e_docu, incoterm, lumps)
-                VALUES (?, ?, ?, ?, ?, ?, ?);
+                INSERT INTO invoices (invoice_number, invoice_date, buyer, total, e_docu, incoterm, lumps, rfc, processed)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
             """, (invoice_data['invoice_number'], invoice_data['invoice_date'], 
                   invoice_data['buyer'], invoice_data['total'], 
                   invoice_data['e_docu'], invoice_data['incoterm'],
-                  invoice_data['lumps']))
+                  invoice_data['lumps'], invoice_data['rfc'], invoice_data['processed']))
                   
             cur.execute("SELECT IDENT_CURRENT('invoices');")
             invoice_id = cur.fetchone()[0]

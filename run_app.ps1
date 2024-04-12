@@ -8,4 +8,4 @@ cd "D:\SpaceGpt\spaceGPT_EXPO"
 python app.py
 
 # Opcional: Abre un navegador en la URL de tu aplicación
-Start-Process "http://localhost:8888"
+Start-Process "http://localhost:9999"
