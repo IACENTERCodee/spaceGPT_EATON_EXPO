@@ -65,6 +65,13 @@ def insert_invoice_data(json_data):
 
             processed_data['processed'] = 0
 
+            if processed_data['e_docu'] is None:
+                processed_data['e_docu'] = "N/A"
+            if processed_data['lumps'] is None:
+                processed_data['lumps'] = "N/A"
+            if processed_data['incoterm'] is None:
+                processed_data['incoterm'] = "N/A"
+
             # Inserta en la tabla de facturas
             invoice_data = processed_data
             cur.execute("""
@@ -77,15 +84,29 @@ def insert_invoice_data(json_data):
                   
             cur.execute("SELECT IDENT_CURRENT('invoices');")
             invoice_id = cur.fetchone()[0]
+            
+            # Lista de claves que se deben verificar y agregar si no existen
+            keys_to_check = ['fraction', "value_added"]
 
             # Inserta en la tabla de elementos de factura
             for item in invoice_data['items']:
+                # Verifica y agrega las claves que no existen
+                for key in keys_to_check:
+                    item.setdefault(key, 'N/A')
+
+            # Inserta en la tabla de elementos de factura
+            for item in invoice_data['items']:
+                if item['value_added'] is None:
+                    item['value_added'] = 0.0
+                if item['fraction'] is None:
+                    item['fraction'] = 'N/A'
                 cur.execute("""
-                    INSERT INTO line_items (invoice_id, description, quantity, unit_of_measure, unit_cost, 
-                            net_weight, total, gross_weight, raw_material, value_added)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-                """, (invoice_id, item['description'], item['quantity'], item['unit_of_measure'], item['unit_cost'], 
-                      item['net_weight'], item['total'], item['gross_weight'], item['raw_material'], item['value_added']))
+                    INSERT INTO line_items (invoice_id, description, part_number, quantity, unit_of_measure, 
+                            net_weight, total, gross_weight, raw_material, value_added, fraction)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """, (invoice_id, item['description'],item['part_number'], item['quantity'], item['unit_of_measure'],
+                      item['net_weight'], item['total'], item['gross_weight'], item['raw_material'], 
+                      item['value_added'], item['fraction']))
             conn.commit()
     except pyodbc.Error as e:
         print(f"Error de SQL Server: {e}")

@@ -1,5 +1,5 @@
 # Navega al directorio donde está tu entorno virtual y tu script de Python
-cd "D:\SpaceGpt\spaceGPT_EXPO"
+cd "D:\SpaceGpt\spaceGPT_EATON_EXPO"
 
 # Activa el entorno virtual
 .\env\Scripts\Activate.ps1
@@ -8,4 +8,4 @@ cd "D:\SpaceGpt\spaceGPT_EXPO"
 python app.py
 
 # Opcional: Abre un navegador en la URL de tu aplicación
-Start-Process "http://localhost:9999"
+Start-Process "http://localhost:5555"

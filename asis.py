@@ -17,7 +17,7 @@ def wait_on_run(run, thread):
 def submit_and_wait_for_response(question):
     try:
         # Retrieve an existing assistant by ID
-        assistant_id = "asst_pQVz6SfbJ3RHMdxPxw0Y7SFn"
+        assistant_id = "asst_mxxoMvgJP92y85zMFS9q1INB"
 
         # Create a new thread
         thread = client.beta.threads.create()

@@ -30,7 +30,7 @@ class OpenAIHelper:
                     "3. There are times that the information is in the same line.")
         json_format,rfc =  search_RFC_in_text(invoice_text)
     
-        if rfc=="MMJ930128UR6":
+        if rfc=="EIN0306306H6":
             extracted_text = submit_and_wait_for_response(invoice_text)
             return  extracted_text
         responses = []

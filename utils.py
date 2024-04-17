@@ -9,25 +9,33 @@ from pdfminer.high_level import extract_text_to_fp
 from io import BytesIO
 
 prompts = {
-    "MMJ930128UR6": {
+    "EIN0306306H6": {
         "Prompt": """
         {
             "invoice_number": "str",
             "invoice_date": "str",
-            "country_of_origin": "str",
-            "supplier": "str" // not take IMPORT EXPORT LETTER, 
+            "e_docu": "str",
+            "buyer": "str",
+            "rfc": "str",
+            "incoterm": "str",
+            "lumps": "int",
             "total": "float",
             "items": [
                 {
-                    "part_number": "str",
+                    "gross_weight": "float",
+                    "net_weight": "float",
                     "description": "str",
-                    "quantity": "int",
+                    "part_number": "str",
+                    "quantity": "float",
                     "unit_of_measure": "str",
-                    "cost": "float",
-                    "weight": "float"
+                    "fraction": "str",
+                    "raw_material": "float",
+                    "value_added": "float",
+                    "total": "float",
                 }
             ]
-        }"""
+        }
+    """
     },
     "EAT930158UR8": {
         "Prompt": """
@@ -102,7 +110,7 @@ def search_RFC_in_text(text):
     """
     Searches for an RFC in the given text and returns the corresponding prompt if found.
     """
-    rfc_list = ["MMJ930128UR6", "EAT930128UR6"]
+    rfc_list = ["EIN0306306H6", "EAT930128UR6"]
     for rfc in rfc_list:
         # Check if the RFC is found in the text
         if search_word(text, rfc):
@@ -110,7 +118,7 @@ def search_RFC_in_text(text):
             return get_prompt(rfc), rfc
     # Return the general prompt if no RFC is found
     print("RFC no encontrado")
-    return get_prompt("GENERAL"),"MMJ930128UR6"
+    return get_prompt("GENERAL"),"EIN0306306H6"
 
 
 def num_tokens_from_string(string: str) -> int:
